@@ -23,6 +23,7 @@ class Checkers:
         the board with pieces
     """
     def __init__(self):
+        Sender.static_init(self)
         self.board = Board(8)
         self.size = self.board.getSize()
         self.turn = 0
