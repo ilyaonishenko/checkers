@@ -14,6 +14,7 @@ from src.TypeMove import *
 from src.Lock import *
 from src.Piece import *
 from src.Sender import *
+from src.Initer import *
 import time
 
 
@@ -44,7 +45,7 @@ class Checkers:
                     self.board.addPiece("Player", 0, x, y)
                 if(y%2==1 and x%2 ==0):
                     self.board.addPiece("Player", 0, x, y)
-
+        Initer.start(self.board)
     def sendAndMove(self, player, x, y, x1, y1):
         # Lock.startTurn(self)
         print(str(player) + str(x) + "," + str(y) + "," + str(x1) + "," + str(y1))
@@ -488,7 +489,7 @@ class Checkers:
         QCoreApplication.processEvents()
         # amount of moves to look ahead currently 3 moves ahead
 
-        ply_depth = 3
+        ply_depth = 5
         # check for end state.
         board.checkWin(typeMove=TypeMove.im)
         if ply >= ply_depth or  board.isOver():

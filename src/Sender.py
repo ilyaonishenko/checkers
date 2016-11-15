@@ -66,8 +66,6 @@ class Sender:
     def takeback_AI(self, placeForm):
         return
 
-    def place_all(self):
-
 
 
 
