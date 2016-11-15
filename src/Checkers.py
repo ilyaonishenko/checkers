@@ -9,11 +9,11 @@ from copy import deepcopy
 # from src import Lock
 # from src import Piece
 # from src import Sender
-from Board import *
-from TypeMove import *
-from Lock import *
-from Piece import *
-from Sender import *
+from src.Board import *
+from src.TypeMove import *
+from src.Lock import *
+from src.Piece import *
+from src.Sender import *
 import time
 
 

@@ -8,9 +8,9 @@ from PyQt5.QtGui import *
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import *
 # import Checkers module
-from Checkers import *
-from TypeMove import *
-from Lock import *
+from src.Checkers import *
+from src.TypeMove import *
+from src.Lock import *
 
 """
     image paths
