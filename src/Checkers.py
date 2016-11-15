@@ -64,7 +64,11 @@ class Checkers:
 
     def makeKing(self, player, x, y, number):
 
-        print("makeKing "+str(number))
+        p = self.board.getPieceAt(x, y)
+        if p.getType() is 0:
+            self.board.updatePieceType(1, x, y)
+            print(str(p.getType()))
+            print("makeKing "+str(number))
         # Lock.startTurn(self)
         # if player is "AI":
         #     Sender.takeback_AI(self, Sender.reformat(self, x, y))
@@ -201,9 +205,9 @@ class Checkers:
 
                             #checks if it is king
                             if self.isKing(x1,y1):
-                                self.board.updatePieceType(1,x1,y1)
                                 if (typeMove == TypeMove.real):
                                     self.makeKing(player, x1, y1, 1)
+                                self.board.updatePieceType(1,x1,y1)
 
                             #checks if it can jump again sets jumpAgain to true if true else set to False
                             if self.canJump(x1, y1):
@@ -234,9 +238,9 @@ class Checkers:
                             self.board.removePiece(removePieceX, removePieceY)
                             #after jumping check if it can be Kinged and can it jump again
                             if self.isKing(x1,y1):
-                                self.board.updatePieceType(1,x1,y1)
                                 if (typeMove == TypeMove.real):
                                     self.makeKing(player, x1, y1, 2)
+                                self.board.updatePieceType(1,x1,y1)
 
                             if self.canJump(x1, y1):
                                 moved = False
@@ -261,9 +265,9 @@ class Checkers:
                             break
                     # if it can be kinged and updates the piece to a king
                     if self.isKing(x1,y1):
-                        self.board.updatePieceType(1,x1,y1)
                         if (typeMove == TypeMove.real):
                             self.makeKing(player, x1, y1, 3)
+                        self.board.updatePieceType(1,x1,y1)
 
             #check is the game is over
             self.checkWin(typeMove=TypeMove.real)
