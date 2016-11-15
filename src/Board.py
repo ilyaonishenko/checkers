@@ -3,6 +3,9 @@
 #import the Piece Class
 from Piece import *
 
+
+# asdjhaskdhaskdas
+
 class Board:
     """ 
         default constructor given by a argument
