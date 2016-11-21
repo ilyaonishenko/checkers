@@ -2,20 +2,11 @@
 
 # Import Qt module
 from PyQt5.QtCore import QCoreApplication
-# import Board Class
 from copy import deepcopy
-# from src import Board
-# from src import TypeMove
-# from src import Lock
-# from src import Piece
-# from src import Sender
 from src.Board import *
 from src.TypeMove import *
-from src.Lock import *
 from src.Piece import *
 from src.Sender import *
-from src.Initer import *
-import time
 
 
 class Checkers:
@@ -45,7 +36,6 @@ class Checkers:
                     self.board.addPiece("Player", 0, x, y)
                 if(y%2==1 and x%2 ==0):
                     self.board.addPiece("Player", 0, x, y)
-        Initer.start(self.board)
     def sendAndMove(self, player, x, y, x1, y1):
         # Lock.startTurn(self)
         print(str(player) + str(x) + "," + str(y) + "," + str(x1) + "," + str(y1))
