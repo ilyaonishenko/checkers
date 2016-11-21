@@ -296,7 +296,7 @@ class Checkers:
 
         print("Server received: " + data)
 
-        conn.send(("MR GRACHEV IS DEFINETELY HUY").encode())
+        conn.send(("MR GRACHEV IS A DEFINETELY HUY").encode())
 
         conn.close()
 
