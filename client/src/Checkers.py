@@ -278,7 +278,7 @@ class Checkers:
         if self.getTurn() == "AI":
 
             # using the alpha beta function to get the best possible score
-            score = self.alpha_beta(self,"AI", 0,-10000,10000)
+            score = self.alpha_beta(self,"AI", 0,-10000,10000,0)
 
             while self.getTurn() == "AI" and  not self.isOver():
                 # alpha_beta function assigns best_move
@@ -298,7 +298,7 @@ class Checkers:
                 # if can jump again call alpha beta again to get the next best possibe move
                 # loop starts again
                 if movs and not moveFinished:
-                    score = self.alpha_beta(self,"AI", 0,-10000,10000)
+                    score = self.alpha_beta(self,"AI", 0,-10000,10000, 0)
                 # piece can't jump again and has moved end turn breaks the while looks
                 else:
                     self.turnEnd()
@@ -477,22 +477,31 @@ class Checkers:
     """
         minimax with alpha beta pruning
     """
-    def alpha_beta(self, board,player, ply, alpha, beta):
+    def alpha_beta(self, board,player, ply, alpha, beta, recursive):
 
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect(('localhost', 8080))
-        s.send(("GRACHEVHUY").encode())
+        if(recursive == 0):
+            s = socket.socket()
+            s.connect(('localhost', 8080))
+            print("sended")
+            s.send(("GRACHEVHUY").encode())
 
 
         QCoreApplication.processEvents()
         # amount of moves to look ahead currently 3 moves ahead
 
-        ply_depth = 5
+        ply_depth = 3
         # check for end state.
         board.checkWin(typeMove=TypeMove.im)
         if ply >= ply_depth or  board.isOver():
             # return evaluation of board  if we reached final ply or end state
             score = board.evaluate(player)
+            if (recursive == 0):
+                print("123")
+
+                receive = s.recv(1024)
+                print("Client received: " + str(receive))
+
+                s.close()
             return score
         #gets moves for the player.
         moves = board.getMoves(player)
@@ -516,11 +525,11 @@ class Checkers:
                     if player == 'AI':
                         player = 'Player'
                     # score = alpha-beta(next players turn,child,alpha,beta)
-                    score = self.alpha_beta(new_board,player, ply+1, alpha, beta)
+                    score = self.alpha_beta(new_board,player, ply+1, alpha, beta, 1)
                 else:
                     # else its still that players turn possibly more then one jump can happen.
                     player ="AI"
-                    score = self.alpha_beta(new_board,player, ply, alpha, beta)
+                    score = self.alpha_beta(new_board,player, ply, alpha, beta, 1)
 
                 # if score > alpha then alpha = score found a better move
                 if score > alpha:
@@ -530,8 +539,22 @@ class Checkers:
                     alpha = score
                 # if alpha >= beta then return alpha (cut off)
                 if alpha >= beta:
+                    if (recursive == 0):
+                        print("123")
+
+                        receive = s.recv(1024)
+                        print("Client received: " + str(receive))
+
+                        s.close()
                     return alpha
             #return alpha this is our best score
+            if (recursive == 0):
+                print("123")
+
+                receive = s.recv(1024)
+                print("Client received: " + str(receive))
+
+                s.close()
             return alpha
 
         # Mins turn
@@ -554,24 +577,35 @@ class Checkers:
                     if player == 'Player':
                         player = 'AI'
                     # score = alpha-beta(next players turn,child,alpha,beta)
-                    score = self.alpha_beta( new_board, player,ply+1, alpha, beta)
+                    score = self.alpha_beta( new_board, player,ply+1, alpha, beta, 1)
                 else:
                     # else its still that players turn possibly more then one jump can happen.
                     player = 'Player'
-                    score = self.alpha_beta( new_board, player,ply, alpha, beta)
+                    score = self.alpha_beta( new_board, player,ply, alpha, beta, 1)
 
                 # if score < beta then beta = score, opponent found a better, worse move
                 if score < beta:
                     beta = score
                 # if alpha >= beta then return beta (cut off)
                 if alpha >= beta:
+                    if (recursive == 0):
+                        print("123")
+
+                        receive = s.recv(1024)
+                        print("Client received: " + str(receive))
+
+                        s.close()
                     return beta
             # return beta the opponent's best move
 
-            receive = s.recv(1024)
-            print("Client received: " + str(receive))
+            if(recursive == 0):
 
-            s.close()
+                print("123")
+
+                receive = s.recv(1024)
+                print("Client received: " + str(receive))
+
+                s.close()
 
 
             return beta
