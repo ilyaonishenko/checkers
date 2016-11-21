@@ -1,7 +1,7 @@
 """ Board Class"""
 
 #import the Piece Class
-from src.Piece import *
+from client.src.Piece import *
 
 
 # asdjhaskdhaskdas

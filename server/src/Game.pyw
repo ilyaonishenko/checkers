@@ -1,16 +1,15 @@
 """The user interface"""
 
-
 import sys
-# Import Qt modules
+
 from PyQt5.QtCore import*
 from PyQt5.QtGui import *
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import *
-# import Checkers module
 from src.Checkers import *
-from src.TypeMove import *
 from src.Lock import *
+
+from client.src.TypeMove import *
 
 """
     image paths

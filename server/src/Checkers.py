@@ -1,12 +1,14 @@
 """ Checkers Logic"""
 
 # Import Qt module
-from PyQt5.QtCore import QCoreApplication
 from copy import deepcopy
+
+from PyQt5.QtCore import QCoreApplication
 from src.Board import *
-from src.TypeMove import *
 from src.Piece import *
-from src.Sender import *
+from src.TypeMove import *
+
+from client.src.Sender import *
 
 
 class Checkers:
