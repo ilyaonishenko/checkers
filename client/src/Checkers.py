@@ -568,8 +568,8 @@ class Checkers:
                     return beta
             # return beta the opponent's best move
 
-            receive = s.recv(256)
-            print("Client received: " + receive)
+            receive = s.recv(1024)
+            print("Client received: " + str(receive))
 
             s.close()
 

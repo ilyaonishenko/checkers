@@ -287,7 +287,7 @@ class Checkers:
     """
     def alpha_beta(self, board,player, ply, alpha, beta):
         sock = socket.socket()
-        sock.bind(('', 8080))
+        sock.bind(('', 9090))
 
         sock.listen(1)
         conn, addr = sock.accept()
