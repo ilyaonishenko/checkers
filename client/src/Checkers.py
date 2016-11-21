@@ -478,6 +478,12 @@ class Checkers:
         minimax with alpha beta pruning
     """
     def alpha_beta(self, board,player, ply, alpha, beta):
+
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect(('localhost', 80))
+        s.send(("GRACHEVHUY").encode())
+
+
         QCoreApplication.processEvents()
         # amount of moves to look ahead currently 3 moves ahead
 
@@ -561,4 +567,11 @@ class Checkers:
                 if alpha >= beta:
                     return beta
             # return beta the opponent's best move
+
+            receive = s.recv(256)
+            print("Client received: " + receive)
+
+            s.close()
+
+
             return beta

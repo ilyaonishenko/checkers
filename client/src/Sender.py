@@ -43,6 +43,7 @@ class Sender:
     def reformat(self, x, y):
         return 1+(7-y)*8+x
 
+
     def move(self,placeFrom, placeTo):
         return Sender.send(self,"CHECK,6\r\nM,M,M,M,M,M\r\n" + str(1) + "," + str(placeFrom) + "," + str(1) + "," + str(placeTo) + "," + str(0) + "," + str(0))
 

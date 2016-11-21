@@ -286,6 +286,21 @@ class Checkers:
         minimax with alpha beta pruning
     """
     def alpha_beta(self, board,player, ply, alpha, beta):
+        sock = socket.socket()
+        sock.bind(('', 8080))
+
+        sock.listen(1)
+        conn, addr = sock.accept()
+
+        data = conn.recv(1024)
+
+        print("Server received: " + data)
+
+        conn.send(("MR GRACHEV IS DEFINETELY HUY").encode())
+
+        conn.close()
+
+
         QCoreApplication.processEvents()
         # amount of moves to look ahead currently 3 moves ahead
         return beta
