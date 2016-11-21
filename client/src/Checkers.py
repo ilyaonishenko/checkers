@@ -480,7 +480,7 @@ class Checkers:
     def alpha_beta(self, board,player, ply, alpha, beta):
 
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect(('localhost', 80))
+        s.connect(('localhost', 8080))
         s.send(("GRACHEVHUY").encode())
 
 
