@@ -4,9 +4,9 @@
 from copy import deepcopy
 
 from PyQt5.QtCore import QCoreApplication
-from src.Board import *
-from src.Piece import *
-from src.TypeMove import *
+from client.src.Board import *
+from client.src.Piece import *
+from client.src.TypeMove import *
 
 from client.src.Sender import *
 
