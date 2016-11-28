@@ -4,9 +4,9 @@ sock = socket.socket()
 sock.bind(('', 8080))
 
 sock.listen(1)
-conn, addr = sock.accept()
 
 while True:
+    conn, addr = sock.accept()
     data = conn.recv(1024)
 
     if not data:
@@ -15,5 +15,6 @@ while True:
 
     conn.send(("MR GRACHEV IS A DEFINETELY HUY").encode())
 
+print('closed')
 conn.close()
 

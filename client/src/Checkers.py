@@ -489,7 +489,7 @@ class Checkers:
         QCoreApplication.processEvents()
         # amount of moves to look ahead currently 3 moves ahead
 
-        ply_depth = 3
+        ply_depth = 1
         # check for end state.
         board.checkWin(typeMove=TypeMove.im)
         if ply >= ply_depth or  board.isOver():
