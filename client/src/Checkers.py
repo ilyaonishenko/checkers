@@ -9,6 +9,7 @@ from client.src.Piece import *
 from client.src.TypeMove import *
 
 from client.src.Sender import *
+from client.src.RabbitClient import *
 
 
 class Checkers:
@@ -479,11 +480,15 @@ class Checkers:
     """
     def alpha_beta(self, board,player, ply, alpha, beta, recursive):
 
+        rabbit = RabbitClient()
+        result = "fuck"
+
         if(recursive == 0):
-            s = socket.socket()
-            s.connect(('localhost', 8080))
-            print("sended")
-            s.send(("GRACHEVHUY").encode())
+            result = rabbit.call("Grachev")
+            # s = socket.socket()
+            # s.connect(('188.166.85.167', 8080))
+            # print("sended")
+            # s.send(("GRACHEVHUY").encode())
 
 
         QCoreApplication.processEvents()
@@ -496,12 +501,12 @@ class Checkers:
             # return evaluation of board  if we reached final ply or end state
             score = board.evaluate(player)
             if (recursive == 0):
-                print("123")
-
-                receive = s.recv(1024)
-                print("Client received: " + str(receive))
-
-                s.close()
+                print("result")
+                print(result)
+                # print("123")
+                # receive = s.recv(1024)
+                # print("Client received: " + str(receive))
+                # s.close()
             return score
         #gets moves for the player.
         moves = board.getMoves(player)
@@ -540,21 +545,21 @@ class Checkers:
                 # if alpha >= beta then return alpha (cut off)
                 if alpha >= beta:
                     if (recursive == 0):
-                        print("123")
-
-                        receive = s.recv(1024)
-                        print("Client received: " + str(receive))
-
-                        s.close()
+                        print("result")
+                        print(result)
+                        # print("123")
+                        # receive = s.recv(1024)
+                        # print("Client received: " + str(receive))
+                        # s.close()
                     return alpha
             #return alpha this is our best score
             if (recursive == 0):
-                print("123")
-
-                receive = s.recv(1024)
-                print("Client received: " + str(receive))
-
-                s.close()
+                print("result")
+                print(result)
+                # print("123")
+                # receive = s.recv(1024)
+                # print("Client received: " + str(receive))
+                # s.close()
             return alpha
 
         # Mins turn
@@ -589,23 +594,22 @@ class Checkers:
                 # if alpha >= beta then return beta (cut off)
                 if alpha >= beta:
                     if (recursive == 0):
-                        print("123")
-
-                        receive = s.recv(1024)
-                        print("Client received: " + str(receive))
-
-                        s.close()
+                        print("result")
+                        print(result)
+                        # print("123")
+                        # receive = s.recv(1024)
+                        # print("Client received: " + str(receive))
+                        # s.close()
                     return beta
             # return beta the opponent's best move
 
             if(recursive == 0):
-
-                print("123")
-
-                receive = s.recv(1024)
-                print("Client received: " + str(receive))
-
-                s.close()
+                print("result")
+                print(result)
+                # print("123")
+                # receive = s.recv(1024)
+                # print("Client received: " + str(receive))
+                # s.close()
 
 
             return beta
