@@ -481,7 +481,7 @@ class Checkers:
 
         if(recursive == 0):
             s = socket.socket()
-            s.connect(('188.166.85.167', 8080))
+            s.connect(('localhost', 8080))
             print("sended")
             s.send(("GRACHEVHUY").encode())
 
