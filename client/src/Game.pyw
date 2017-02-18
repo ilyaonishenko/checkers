@@ -43,6 +43,11 @@ class ImgWidget(QWidget):
     GUI Class main interface for the user.
 """
 
+def main():
+    app = QApplication(sys.argv)
+    interface = GUI()
+    sys.exit(app.exec_())
+
 class GUI(QWidget):
     # default constructor calls initUI
     def __init__(self):
@@ -268,7 +273,10 @@ class GUI(QWidget):
                     if self.game.getTurn()== "AI" and  not self.game.isOver():
                         # call the AI to make a move and update the move it has taken.
                         #returns a string and highlights the move its taken
-                        ai_moved = self.game.AI()
+                        info_to_send = deepcopy(self.game)
+                        rabbit = RabbitClient()
+                        ai_moved = rabbit.call(info_to_send)
+
                         self.updateGame()
                         if len(ai_moved) >0:
                             self.highlightPiece(ai_moved[0], ai_moved[1])
@@ -387,11 +395,6 @@ class GUI(QWidget):
             event.accept()
         else:
             event.ignore()
-
-def main():
-    app = QApplication(sys.argv)
-    interface = GUI()
-    sys.exit(app.exec_())
 
 if __name__ == "__main__":
     main()

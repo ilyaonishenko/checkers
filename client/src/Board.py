@@ -2,6 +2,8 @@
 
 #import the Piece Class
 from client.src.Piece import *
+from client.src.Encoder import *
+import json
 
 
 # asdjhaskdhaskdas
@@ -20,6 +22,9 @@ class Board:
             self.array.append([])
             for j in range (self.size):
                 self.array[i].append(None)
+
+    def __json__(self):
+        return {'array': json.dumps(self.array, cls=Encoder), 'size': self.size, 'aiPieces': self.aiPieces, 'playerPieces': self.playerPieces}
                 
     """ 
         Adds a piece to the array given by owner, type , at position x and y

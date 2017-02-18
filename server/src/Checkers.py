@@ -7,8 +7,10 @@ from PyQt5.QtCore import QCoreApplication
 from server.src.Board import *
 from server.src.Piece import *
 from server.src.TypeMove import *
-
+from server.src.Encoder import *
 from server.src.Sender import *
+
+import json
 
 
 class Checkers:
@@ -16,14 +18,31 @@ class Checkers:
         default constructor creates the board and populates
         the board with pieces
     """
-    def __init__(self):
-        self.board = Board(8)
-        self.size = self.board.getSize()
-        self.turn = 0
-        self.best_move = None
-        self.game_over = False
-        self.jumpAgain = (False,None,None)
+    def __init__(self, *args, **kwargs):
+        if len(kwargs) is 0:
+            self.board = Board(8)
+            self.size = self.board.getSize()
+            self.turn = 0
+            self.best_move = None
+            self.game_over = False
+            self.jumpAgain = (False,None,None)
+        else:
+            self.board = kwargs['board']
+            self.size = kwargs['size']
+            self.turn = kwargs['turn']
+            self.best_move = kwargs['best_move']
+            self.game_over = kwargs['game_over']
+            self.jumpAgain = kwargs['jumpAgain']
 
+    def __json__(self):
+        return {'board': json.dumps(self.board, cls=Encoder), 'size': self.size, 'turn': self.turn, 'best_move': self.best_move,
+                'game_over': self.game_over, 'jump_again': self.jumpAgain, 'p': json.dumps(self.p, cls=Encoder)}
+
+    @staticmethod
+    def create_from_dump(board, size, turn, best_move, game_over, jumpAgain):
+        return Checkers(board = board, size = size, turn = turn,
+                        best_move = best_move, game_over = game_over,
+                        jumpAgain = jumpAgain)
     """
          gets if any of the players pieces can jump and adds it to
          the array, and returns it
@@ -154,6 +173,40 @@ class Checkers:
     def turnEnd(self):
         self.turn+=1
 
+    def AI(self):
+        moveFinished= False
+        # if turn is AI s
+        if self.getTurn() == "AI":
+
+            # using the alpha beta function to get the best possible score
+            score = self.alpha_beta(self,"AI", 0,-10000,10000,0)
+
+            while self.getTurn() == "AI" and  not self.isOver():
+                # alpha_beta function assigns best_move
+                movstr = self.best_move
+                if score == -10000 or len(self.getMoves("AI")) == 0:
+                    # if score == -10000  or length of moves for AI is 0 then no moves for available
+                    # game over then
+                    self.game_over = True
+                # parses movstr to move the piece
+                x1 = movstr[0]
+                y1 = movstr[1]
+                x2 = movstr[2]
+                y2 = movstr[3]
+                moveFinished = self.movePiece("AI",x1, y1, x2, y2, TypeMove.real)
+                # checks if that piece can jump again
+                movs = self.canJump(x2, y2)
+                # if can jump again call alpha beta again to get the next best possibe move
+                # loop starts again
+                if movs and not moveFinished:
+                    score = self.alpha_beta(self,"AI", 0,-10000,10000, 0)
+                # piece can't jump again and has moved end turn breaks the while looks
+                else:
+                    self.turnEnd()
+        # returns a tuple for GUI to highlight the piece moved
+        if moveFinished  :
+            return ((x1),(y1),(x2),(y2))
+
     # returns if its players turn or AI's turn
     def getTurn(self):
         if(self.turn % 2 == 0):
@@ -282,25 +335,195 @@ class Checkers:
         return movableP
 
     # evaluates the player for minimax with alpha beta pruning
+    def evaluate(self, playerTurn):
+        player = 0
+        ai = 0
+        for i in range(0, self.board.getSize()):
+            for j in range(0, self.board.getSize()):
+                tmp = self.board.getPieceAt(i, j)
+                if tmp:
+                    if tmp.getOwner() == "Player":
+                        if tmp.getType() == 0:
+                            player += 5
+                            # Player piece at the left, top or right edge +2 as its a space position
+                            if i == 0 or i == self.board.getSize() - 1 or j == 0:
+                                player += 2
+                        if tmp.getType() == 1:
+                            player += 10
+                            # stopping king moving between edge and the next empty space repeatedly
+                            if i == 0 or i == self.board.getSize() - 1 or j == 0 or j == self.board.getSize() - 1:
+                                player -= 10
+                    if tmp.getOwner() == "AI":
+                        if tmp.getType() == 0:
+                            ai += 5
+                            # AI if piece at the left, bottom or right edge +2 as its a space position
+                            if i == 0 or i == self.board.getSize() - 1 or j == self.board.getSize() - 1:
+                                ai += 2
+                        if tmp.getType() == 1:
+                            ai += 10
+                            # stopping king moving between edge and the next empty space repeatedly
+                            if i == 0 or i == self.board.getSize() - 1 or j == 0 or j == self.board.getSize() - 1:
+                                ai -= 10
+        # returns in favour of the playersTurn for minimax
+        if playerTurn == "AI":
+            return player - ai
+        else:
+            return ai - player
+
     """
         minimax with alpha beta pruning
     """
-    def alpha_beta(self, board,player, ply, alpha, beta):
-        sock = socket.socket()
-        sock.bind(('', 9090))
 
-        sock.listen(1)
-        conn, addr = sock.accept()
+    def alpha_beta(self, board, player, ply, alpha, beta, recursive):
 
-        data = conn.recv(1024)
-
-        print("Server received: " + data)
-
-        conn.send(("MR GRACHEV IS A DEFINETELY HUY").encode())
-
-        conn.close()
-
+        # rabbit = RabbitClient()
+        # result = "fuck"
+        #
+        # if (recursive == 0):
+        #     result = rabbit.call("Grachev")
+        #     # s = socket.socket()
+        #     # s.connect(('188.166.85.167', 8080))
+        #     # print("sended")
+        #     # s.send(("GRACHEVHUY").encode())
 
         QCoreApplication.processEvents()
         # amount of moves to look ahead currently 3 moves ahead
-        return beta
+
+        ply_depth = 1
+        # check for end state.
+        board.checkWin(typeMove=TypeMove.im)
+        if ply >= ply_depth or board.isOver():
+            # return evaluation of board  if we reached final ply or end state
+            score = board.evaluate(player)
+            # if (recursive == 0):
+            #     print("result")
+            #     print(result)
+            #     # print("123")
+            #     # receive = s.recv(1024)
+            #     # print("Client received: " + str(receive))
+            #     # s.close()
+            return score
+        # gets moves for the player.
+        moves = board.getMoves(player)
+        # Max's Turn
+        if player == "AI" and not ply == ply_depth:  # if AI to play on node
+            # ply%2 is 0 every second turn
+            # For each child of the root node.
+            for i in moves:
+                # create a deep copy of the board "Assignment statements in Python do not copy objects"
+                # or else it is just a reference
+                new_board = deepcopy(board)
+                # parsing the value of i, moves
+                x1 = int(i[0])
+                y1 = int(i[2])
+                x2 = int(i[4])
+                y2 = int(i[6])
+                # moving the piece
+                finishMove = new_board.movePiece("AI", x1, y1, x2, y2, TypeMove.im)
+                if finishMove:
+                    # if move is true then next player and ply +1
+                    if player == 'AI':
+                        player = 'Player'
+                    # score = alpha-beta(next players turn,child,alpha,beta)
+                    score = self.alpha_beta(new_board, player, ply + 1, alpha, beta, 1)
+                else:
+                    # else its still that players turn possibly more then one jump can happen.
+                    player = "AI"
+                    score = self.alpha_beta(new_board, player, ply, alpha, beta, 1)
+
+                # if score > alpha then alpha = score found a better move
+                if score > alpha:
+                    if ply == 0:
+                        self.best_move = (x1, y1, x2, y2)  # save the move best move
+                    # assign the better score to alpha
+                    alpha = score
+                # if alpha >= beta then return alpha (cut off)
+                if alpha >= beta:
+                    # if (recursive == 0):
+                    #     print("result")
+                    #     print(result)
+                    #     # print("123")
+                    #     # receive = s.recv(1024)
+                    # print("Client received: " + str(receive))
+                    # s.close()
+                    return alpha
+                    # return alpha this is our best score
+                    # if (recursive == 0):
+                    #     print("result")
+                    #     print(result)
+                    #     # print("123")
+                    #     # receive = s.recv(1024)
+                    #     # print("Client received: " + str(receive))
+                    # s.close()
+            return alpha
+
+        # Mins turn
+        elif player == "Player" and not ply == ply_depth:  # the opponent of the AI to play on this node
+            # ply%2 is 1 every second turn
+            # For each child
+            for i in moves:
+                # create a deep copy of the board "Assignment statements in Python do not copy objects"
+                # or else it is just a reference
+                new_board = deepcopy(board)
+                # parsing the value of i, moves
+                x1 = int(i[0])
+                y1 = int(i[2])
+                x2 = int(i[4])
+                y2 = int(i[6])
+                # moving the piece
+                finishMove = new_board.movePiece("Player", x1, y1, x2, y2, TypeMove.im)
+                if finishMove:
+                    # if move is true then next player and ply +1
+                    if player == 'Player':
+                        player = 'AI'
+                    # score = alpha-beta(next players turn,child,alpha,beta)
+                    score = self.alpha_beta(new_board, player, ply + 1, alpha, beta, 1)
+                else:
+                    # else its still that players turn possibly more then one jump can happen.
+                    player = 'Player'
+                    score = self.alpha_beta(new_board, player, ply, alpha, beta, 1)
+
+                # if score < beta then beta = score, opponent found a better, worse move
+                if score < beta:
+                    beta = score
+                # if alpha >= beta then return beta (cut off)
+                if alpha >= beta:
+                    # if (recursive == 0):
+                    #     print("result")
+                    #     print(result)
+                    #     # print("123")
+                    # receive = s.recv(1024)
+                    # print("Client received: " + str(receive))
+                    # s.close()
+                    return beta
+                    # return beta the opponent's best move
+
+                    # if (recursive == 0):
+                    #     print("result")
+                    #     print(result)
+                    #     # print("123")
+                    # receive = s.recv(1024)
+                    # print("Client received: " + str(receive))
+                    # s.close()
+
+            return beta
+
+        # sock = socket.socket()
+        # sock.bind(('', 9090))
+        #
+        # sock.listen(1)
+        # conn, addr = sock.accept()
+        #
+        # data = conn.recv(1024)
+        #
+        # print("Server received: " + data)
+        #
+        # conn.send(("MR GRACHEV IS A DEFINETELY HUY").encode())
+        #
+        # conn.close()
+        #
+        #
+        # QCoreApplication.processEvents()
+        # # amount of moves to look ahead currently 3 moves ahead
+        # return beta
+

@@ -5,6 +5,9 @@ class Piece:
     def __init__(self):
         self.type = 0
         self.owner = ""
+
+    def __json__(self):
+        return {"type": self.type, "owner": self.owner}
     
     #setup assigns owner and type to itself
     def setup(self,owner,type):

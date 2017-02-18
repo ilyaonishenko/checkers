@@ -39,6 +39,10 @@ class Checkers:
                     self.board.addPiece("Player", 0, x, y)
                 if(y%2==1 and x%2 ==0):
                     self.board.addPiece("Player", 0, x, y)
+
+    def __json__(self):
+        return {'board': json.dumps(self.board, cls=Encoder), 'size': self.size, 'turn': self.turn, 'best_move': self.best_move,
+                'game_over': self.game_over, 'jump_again': self.jumpAgain, 'p': json.dumps(self.p, cls=Encoder)}
     def sendAndMove(self, player, x, y, x1, y1):
         # Lock.startTurn(self)
         print(str(player) + str(x) + "," + str(y) + "," + str(x1) + "," + str(y1))

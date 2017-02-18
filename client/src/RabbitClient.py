@@ -1,5 +1,7 @@
 import pika
 import uuid
+import json
+from client.src.Encoder import Encoder
 
 
 class RabbitClient(object):
@@ -22,16 +24,19 @@ class RabbitClient(object):
     def call(self, n):
         self.response = None
         self.corr_id = str(uuid.uuid4())
+        cBody = json.dumps(n, cls=Encoder)
+        print(cBody)
         self.channel.basic_publish(exchange='',
                                    routing_key='rpc_queue',
                                    properties=pika.BasicProperties(
                                        reply_to=self.callback_queue,
                                        correlation_id=self.corr_id,
                                    ),
-                                   body=str(n))
+                                   body=cBody)
         while self.response is None:
             self.connection.process_data_events()
-        return hash(self.response)
+        # return hash(self.response)
+        return json.loads(self.response.decode("utf-8"))
 
 
 # fibonacci_rpc = FibonacciRpcClient()
