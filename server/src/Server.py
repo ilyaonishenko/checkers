@@ -8,6 +8,8 @@ from server.src.Board import Board
 from server.src.Checkers import Checkers
 from server.src.Piece import Piece
 from server.src.Transformer import Transformer
+from copy import deepcopy
+from server.src.Encoder import Encoder
 
 if False:
     sock = socket.socket()
@@ -35,7 +37,9 @@ channel.queue_declare(queue='rpc_queue')
 
 
 def evaluate_move(game):
-    return game.AI()
+    g = game.AI()
+    d = deepcopy(game)
+    return {'ai': g, 'deepcopy':d}
 
 def update_pieces(pieces):
     for i in range(8):
@@ -66,6 +70,8 @@ def parse_dump(bytes):
 def on_request(ch, method, props, body):
     status = parse_dump(body)
     game = evaluate_move(status)
+    cBody = json.dumps(game, cls=Encoder)
+    print(cBody)
     print("get game body")
     # response = "MR GRACHEV IS A DEFINETELY HUY"
 
@@ -73,7 +79,7 @@ def on_request(ch, method, props, body):
                      routing_key=props.reply_to,
                      properties=pika.BasicProperties(correlation_id= \
                                                          props.correlation_id),
-                     body=json.dumps(game, cls=Encoder))
+                     body=cBody)
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
