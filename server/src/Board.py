@@ -31,12 +31,9 @@ class Board:
             self.playerPieces = kwargs['playerPieces']
 
     class Factory:
-        def create(self, array, size, aiPieces, playerPieces):
+        @staticmethod
+        def create(array, size, aiPieces, playerPieces):
             return Board(array=array, size=size, aiPieces=aiPieces, playerPieces=playerPieces)
-
-    @staticmethod
-    def create_from_dump(array, size, aiPieces, playerPieces):
-        return Board(array=array, size=size, aiPieces=aiPieces, playerPieces=playerPieces)
 
     def __json__(self):
         return {'array': json.dumps(self.array, cls=Encoder), 'size': self.size, 'aiPieces': self.aiPieces,

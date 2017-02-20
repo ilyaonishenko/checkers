@@ -10,6 +10,7 @@ from client.src.Checkers import *
 from client.src.Lock import *
 
 from client.src.TypeMove import *
+from client.src.Decoder import Decoder
 
 """
     image paths
@@ -275,8 +276,9 @@ class GUI(QWidget):
                         #returns a string and highlights the move its taken
                         info_to_send = deepcopy(self.game)
                         rabbit = RabbitClient()
-                        ai_moved = rabbit.call(info_to_send)
-
+                        response = rabbit.call(info_to_send)
+                        ai_moved = Decoder.get_ai_move(response)
+                        self.game = Decoder.get_game(response)
                         self.updateGame()
                         if len(ai_moved) >0:
                             self.highlightPiece(ai_moved[0], ai_moved[1])

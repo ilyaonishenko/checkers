@@ -17,32 +17,48 @@ class Checkers:
         default constructor creates the board and populates
         the board with pieces
     """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         Sender.static_init(self)
-        self.board = Board(8)
-        self.size = self.board.getSize()
-        self.turn = 0
-        self.best_move = None
-        self.game_over = False
-        self.jumpAgain = (False,None,None)
+        if len(kwargs) is 0:
+            self.board = Board(8)
+            self.size = self.board.getSize()
+            self.turn = 0
+            self.best_move = None
+            self.game_over = False
+            self.jumpAgain = (False,None,None)
 
-        for y in range(0,3):
-            for x in range(self.size):
-                if(y%2 ==0 and x%   2 ==1 ):
-                    self.board.addPiece("AI", 0, x, y)
-                if(y%2==1 and x%2 ==0):
-                    self.board.addPiece("AI", 0, x, y)
+            for y in range(0,3):
+                for x in range(self.size):
+                    if(y%2 ==0 and x%   2 ==1 ):
+                        self.board.addPiece("AI", 0, x, y)
+                    if(y%2==1 and x%2 ==0):
+                        self.board.addPiece("AI", 0, x, y)
 
-        for y in range(5,self.size):
-            for x in range(self.size):
-                if(y%2 ==0 and x%2 ==1 ):
-                    self.board.addPiece("Player", 0, x, y)
-                if(y%2==1 and x%2 ==0):
-                    self.board.addPiece("Player", 0, x, y)
+            for y in range(5,self.size):
+                for x in range(self.size):
+                    if(y%2 ==0 and x%2 ==1 ):
+                        self.board.addPiece("Player", 0, x, y)
+                    if(y%2==1 and x%2 ==0):
+                        self.board.addPiece("Player", 0, x, y)
+        else:
+            self.board = kwargs['board']
+            self.size = kwargs['size']
+            self.turn = kwargs['turn']
+            self.best_move = kwargs['best_move']
+            self.game_over = kwargs['game_over']
+            self.jumpAgain = kwargs['jumpAgain']
 
     def __json__(self):
         return {'board': json.dumps(self.board, cls=Encoder), 'size': self.size, 'turn': self.turn, 'best_move': self.best_move,
                 'game_over': self.game_over, 'jump_again': self.jumpAgain, 'p': json.dumps(self.p, cls=Encoder)}
+
+    class Factory:
+        @staticmethod
+        def create(board, size, turn, best_move, game_over, jumpAgain):
+            return Checkers(board=board, size=size, turn=turn,
+                            best_move=best_move, game_over=game_over,
+                            jumpAgain=jumpAgain)
+
     def sendAndMove(self, player, x, y, x1, y1):
         # Lock.startTurn(self)
         print(str(player) + str(x) + "," + str(y) + "," + str(x1) + "," + str(y1))

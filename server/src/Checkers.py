@@ -38,11 +38,12 @@ class Checkers:
         return {'board': json.dumps(self.board, cls=Encoder), 'size': self.size, 'turn': self.turn, 'best_move': self.best_move,
                 'game_over': self.game_over, 'jump_again': self.jumpAgain, 'p': json.dumps(self.p, cls=Encoder)}
 
-    @staticmethod
-    def create_from_dump(board, size, turn, best_move, game_over, jumpAgain):
-        return Checkers(board = board, size = size, turn = turn,
-                        best_move = best_move, game_over = game_over,
-                        jumpAgain = jumpAgain)
+    class Factory:
+        @staticmethod
+        def create(board, size, turn, best_move, game_over, jumpAgain):
+            return Checkers(board=board, size=size, turn=turn,
+                            best_move=best_move, game_over=game_over,
+                            jumpAgain=jumpAgain)
     """
          gets if any of the players pieces can jump and adds it to
          the array, and returns it

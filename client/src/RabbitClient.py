@@ -25,7 +25,7 @@ class RabbitClient(object):
         self.response = None
         self.corr_id = str(uuid.uuid4())
         cBody = json.dumps(n, cls=Encoder)
-        print(cBody)
+        # print(cBody)
         self.channel.basic_publish(exchange='',
                                    routing_key='rpc_queue',
                                    properties=pika.BasicProperties(

@@ -1,5 +1,6 @@
 """ Piece Class"""
 
+
 class Piece:
     # default constructor
     def __init__(self, *args, **kwargs):
@@ -10,27 +11,28 @@ class Piece:
             self.type = kwargs['type']
             self.owner = kwargs['owner']
 
-    @staticmethod
-    def create_from_dump(type, owner):
-        return Piece(type = type, owner = owner)
+    class Factory:
+        @staticmethod
+        def create(type, owner):
+            return Piece(type=type, owner=owner)
 
     def __json__(self):
         return {"type": self.type, "owner": self.owner}
 
-    #setup assigns owner and type to itself
-    def setup(self,owner,type):
+    # setup assigns owner and type to itself
+    def setup(self, owner, type):
         self.type = type
         self.owner = owner
-    
-    #returns type
+
+    # returns type
     def getType(self):
         return self.type
-    
-    #returns owner
+
+    # returns owner
     def getOwner(self):
         return self.owner
 
-    #prints owner and type    
+    # prints owner and type
     def printPieceInfo(self):
-        print("Owner =" , self.owner)
-        print("Type =" , self.type)
+        print("Owner =", self.owner)
+        print("Type =", self.type)
