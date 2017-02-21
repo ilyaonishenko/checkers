@@ -1,8 +1,8 @@
 """ Board Class"""
 
 # import the Piece Class
-from server.src.Encoder import Encoder
-from server.src.Piece import *
+import Encoder
+import Piece
 import json
 
 

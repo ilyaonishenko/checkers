@@ -4,11 +4,11 @@
 from copy import deepcopy
 
 from PyQt5.QtCore import QCoreApplication
-from server.src.Board import *
-from server.src.Piece import *
-from server.src.TypeMove import *
-from server.src.Encoder import *
-from server.src.Sender import *
+import Board
+import Piece
+import TypeMove
+import Encoder
+import Sender
 
 import json
 

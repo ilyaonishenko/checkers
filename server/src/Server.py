@@ -3,12 +3,11 @@ import pika
 import json
 import ast
 
-from server.src.Board import Board
-from server.src.Checkers import Checkers
-from server.src.Piece import Piece
-from server.src.Transformer import Transformer
+import Board
+import Checkers
+import Piece
 from copy import deepcopy
-from server.src.Encoder import Encoder
+import Encoder
 
 if False:
     sock = socket.socket()
