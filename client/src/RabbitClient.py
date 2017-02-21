@@ -1,14 +1,21 @@
 import pika
 import uuid
 import json
+import configparser
+from pkg_resources import resource_filename
 from client.src.Encoder import Encoder
 
 
 class RabbitClient(object):
     def __init__(self):
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(
-            host='188.166.85.167'))
-
+        self.config = configparser.ConfigParser()
+        self.config.read(resource_filename('server','foo.config'))
+        self.uname = self.config['RABBITMQ']['user']
+        self.pas = self.config['RABBITMQ']['password']
+        self.info = pika.PlainCredentials(self.uname, self.pas)
+        self.connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host='188.166.85.167',
+                                      credentials=self.info))
         self.channel = self.connection.channel()
 
         result = self.channel.queue_declare(exclusive=True)
