@@ -7,7 +7,7 @@ from client.src.Encoder import Encoder
 class RabbitClient(object):
     def __init__(self):
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(
-            host='localhost'))
+            host='188.166.85.167'))
 
         self.channel = self.connection.channel()
 
