@@ -36,7 +36,7 @@ class Board:
             return Board(array=array, size=size, aiPieces=aiPieces, playerPieces=playerPieces)
 
     def __json__(self):
-        return {'array': json.dumps(self.array, cls=Encoder), 'size': self.size, 'aiPieces': self.aiPieces,
+        return {'array': json.dumps(self.array, cls=Encoder.Encoder), 'size': self.size, 'aiPieces': self.aiPieces,
                 'playerPieces': self.playerPieces}
 
     """ 
@@ -45,7 +45,7 @@ class Board:
     """
 
     def addPiece(self, owner, type, x, y):
-        piece = Piece()
+        piece = Piece.Piece()
         piece.setup(owner, type)
         if self.array[int(x)][int(y)] == None:
             if piece.getOwner() == "AI" and (piece.getType() == 1 or piece.getType() == 0):

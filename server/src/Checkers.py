@@ -35,8 +35,8 @@ class Checkers:
             self.jumpAgain = kwargs['jumpAgain']
 
     def __json__(self):
-        return {'board': json.dumps(self.board, cls=Encoder), 'size': self.size, 'turn': self.turn, 'best_move': self.best_move,
-                'game_over': self.game_over, 'jump_again': self.jumpAgain, 'p': json.dumps(self.p, cls=Encoder)}
+        return {'board': json.dumps(self.board, cls=Encoder.Encoder), 'size': self.size, 'turn': self.turn, 'best_move': self.best_move,
+                'game_over': self.game_over, 'jump_again': self.jumpAgain, 'p': json.dumps(self.p, cls=Encoder.Encoder)}
 
     class Factory:
         @staticmethod
@@ -166,7 +166,7 @@ class Checkers:
                         self.board.updatePieceType(1,x1,y1)
 
             #check is the game is over
-            self.checkWin(typeMove=TypeMove.real)
+            self.checkWin(typeMove=TypeMove.TypeMove.real)
 
         return moved
 
@@ -194,7 +194,7 @@ class Checkers:
                 y1 = movstr[1]
                 x2 = movstr[2]
                 y2 = movstr[3]
-                moveFinished = self.movePiece("AI",x1, y1, x2, y2, TypeMove.real)
+                moveFinished = self.movePiece("AI",x1, y1, x2, y2, TypeMove.TypeMove.real)
                 # checks if that piece can jump again
                 movs = self.canJump(x2, y2)
                 # if can jump again call alpha beta again to get the next best possibe move
@@ -219,7 +219,7 @@ class Checkers:
          or Player piece hits the top of the board
     """
     def isKing(self,x,y):
-        self.p = Piece()
+        self.p = Piece.Piece()
         self.p = self.board.getPieceAt(x, y)
         if(self.board.pieceAt(x, y)):
             if self.p.getOwner() == "AI" and y == self.board.getSize()-1:
@@ -392,7 +392,7 @@ class Checkers:
 
         ply_depth = 1
         # check for end state.
-        board.checkWin(typeMove=TypeMove.im)
+        board.checkWin(typeMove=TypeMove.TypeMove.im)
         if ply >= ply_depth or board.isOver():
             # return evaluation of board  if we reached final ply or end state
             score = board.evaluate(player)
@@ -420,7 +420,7 @@ class Checkers:
                 x2 = int(i[4])
                 y2 = int(i[6])
                 # moving the piece
-                finishMove = new_board.movePiece("AI", x1, y1, x2, y2, TypeMove.im)
+                finishMove = new_board.movePiece("AI", x1, y1, x2, y2, TypeMove.TypeMove.im)
                 if finishMove:
                     # if move is true then next player and ply +1
                     if player == 'AI':

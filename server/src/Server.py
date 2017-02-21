@@ -41,7 +41,7 @@ def evaluate_move(game):
 
 
 def update_pieces(pieces):
-    return [[Piece.Factory.create(x['type'], x['owner']) if x is not None else None for x in arr] for arr in pieces]
+    return [[Piece.Piece.Factory.create(x['type'], x['owner']) if x is not None else None for x in arr] for arr in pieces]
 
 
 def parse_dump(bytes):
@@ -52,9 +52,9 @@ def parse_dump(bytes):
     pieces = ast.literal_eval(board_list['array'].replace('null', 'None'))
     pieces = update_pieces(pieces)
     # piece = Piece.create_from_dump(int(ast.literal_eval(dump['p'])['type']), ast.literal_eval(dump['p'])['owner'])
-    board = Board.Factory.create(pieces, board_list['size'],
+    board = Board.Board.Factory.create(pieces, board_list['size'],
                                    board_list['aiPieces'], board_list['playerPieces'])
-    return Checkers.Factory.create(board, int(dump['size']), int(dump['turn']),
+    return Checkers.Checkers.Factory.create(board, int(dump['size']), int(dump['turn']),
                                      dump['best_move'], dump['game_over'], dump['jump_again'])
 
 
@@ -68,7 +68,7 @@ def parse_dump(bytes):
 def on_request(ch, method, props, body):
     status = parse_dump(body)
     game = evaluate_move(status)
-    cBody = json.dumps(game, cls=Encoder)
+    cBody = json.dumps(game, cls=Encoder.Encoder)
     # print(cBody)
     # print("get game body")
     # response = "MR GRACHEV IS A DEFINETELY HUY"
