@@ -1,9 +1,16 @@
 import socket
 import time
 import pika
+import configparser
+from pkg_resources import resource_filename
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='localhost'))
+config = configparser.ConfigParser()
+config.read(resource_filename('server', 'foo.config'))
+uname = config['RABBITMQ']['user']
+pas = config['RABBITMQ']['password']
+info = pika.PlainCredentials(uname, pas)
+connection = pika.BlockingConnection(
+pika.ConnectionParameters(host='188.166.85.167', credentials=info))
 channel = connection.channel()
 
 channel.queue_declare(queue='for_robot')
