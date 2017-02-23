@@ -9,9 +9,27 @@ import Piece
 from copy import deepcopy
 import Encoder
 
-if False:
-    sock = socket.socket()
-    sock.bind(('', 8080))
+
+class GameState:
+    game_is_started = False
+
+    data_to_send = None
+
+
+    @staticmethod
+    def Start():
+        if GameState.game_is_started is False:
+            GameState.game_is_started = True
+
+    @staticmethod
+    def End():
+        if GameState.game_is_started is True:
+            GameState.game_is_started = False
+
+
+'''
+sock = socket.socket()
+sock.bind(('', 8080))
 
     sock.listen(1)
 
@@ -27,11 +45,14 @@ if False:
 
     print('closed')
     conn.close()
+'''
+
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(
     host='localhost'))
 channel = connection.channel()
 channel.queue_declare(queue='rpc_queue')
+channel.queue_declare(queue='turn_queue')
 
 
 def evaluate_move(game):
@@ -68,6 +89,8 @@ def parse_dump(bytes):
 def on_request(ch, method, props, body):
     status = parse_dump(body)
     game = evaluate_move(status)
+    x1, y1, x2, y2 = game['ai']
+    #print("AI_TURN: " + str(x1) + " " + str(y1) + " -> " + str(x2) + " " + str(y2))
     cBody = json.dumps(game, cls=Encoder.Encoder)
     # print(cBody)
     # print("get game body")
@@ -79,9 +102,31 @@ def on_request(ch, method, props, body):
                      body=cBody)
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
+def on_turn_request(ch, method, props, body):
+    print (body.decode() + "received")
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+        'localhost'))
+    channel = connection.channel()
+
+    channel.queue_declare(queue='for_robot')
+    channel.basic_publish(exchange='',
+                          routing_key='for_robot',
+                          body=body.decode())
+    connection.close()
+    #dump = body.decode("utf-8")
+    #GameState.Start()
+    #GameState.data_to_send = dump
+    #ch.basic_publish(exchange='',
+                     #routing_key=props.reply_to,
+                     #properties=pika.BasicProperties(correlation_id=props.correlation_id),
+                     #body=("GOOD").encode())
+    #ch.basic_ack(delivery_tag=method.delivery_tag)
+
+
 
 channel.basic_qos(prefetch_count=1)
 channel.basic_consume(on_request, queue='rpc_queue')
+channel.basic_consume(on_turn_request, queue='turn_queue', no_ack=True)
 
 print(" [x] Awaiting RPC requests")
 channel.start_consuming()

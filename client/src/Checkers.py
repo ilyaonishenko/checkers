@@ -17,6 +17,9 @@ class Checkers:
         default constructor creates the board and populates
         the board with pieces
     """
+
+
+
     def __init__(self, *args, **kwargs):
         Sender.static_init(self)
         if len(kwargs) is 0:
@@ -61,7 +64,11 @@ class Checkers:
 
     def sendAndMove(self, player, x, y, x1, y1):
         # Lock.startTurn(self)
-        print(str(player) + str(x) + "," + str(y) + "," + str(x1) + "," + str(y1))
+        #print("MOVE " + str(player) + str(x) + "," + str(y) + "," + str(x1) + "," + str(y1))
+        data = "MOVE " + str(x) + "," + str(y) + "," + str(x1) + "," + str(y1)
+        self.send(data)
+
+
         #sending
         # Sender.move(self, Sender.reformat(self,x,y), Sender.reformat(self,x1,y1))
         # time.sleep(4)
@@ -69,13 +76,27 @@ class Checkers:
 
     def sendAndRemove(self, player, removePieceX, removePieceY):
         # Lock.startTurn(self)
-        print("remove  " + str(removePieceX) + "," + str(removePieceY))
+        #print("REMOVE " + str(removePieceX) + "," + str(removePieceY))
+        data = "REMOVE " + str(removePieceX) + "," + str(removePieceY)
+        self.send(data)
         #sending
         # if player is "AI":
         #     Sender.remove_AI(self, Sender.reformat(self,removePieceX, removePieceY))
         # else: Sender.remove_player(self, Sender.reformat(self,removePieceX, removePieceY))
         # time.sleep(4)
         # Lock.endTurn(self)
+
+    def send(self, data):
+        connection = pika.BlockingConnection(pika.ConnectionParameters(
+            'localhost'))
+        channel = connection.channel()
+
+        channel.queue_declare(queue='turn_queue')
+        channel.basic_publish(exchange='',
+                              routing_key='turn_queue',
+                              body='player' + data)
+        connection.close()
+
 
     def makeKing(self, player, x, y, number):
 
@@ -98,7 +119,7 @@ class Checkers:
             for y in range(0, 8):
                 if self.board.array[int(x)][int(y)] is not None:
                     player = self.board.getPieceAt(x, y)
-                    self.sendAndRemove(player, x, y)
+                    #self.sendAndRemove(player, x, y)
 
     def loadBoard(self,board):
         self.board = board
@@ -185,6 +206,9 @@ class Checkers:
 
     # moves a piece players piece from X Y to x1 y1
     def movePiece(self,player,x,y,x1,y1,typeMove):
+
+        print("movepiece\n")
+        self.data_to_send = ""
 
         #self.sender = Sender#
 
@@ -498,13 +522,17 @@ class Checkers:
     """
         minimax with alpha beta pruning
     """
+    def send_turn(self, body):
+        connection = pika.BlockingConnection(pika.ConnectionParameters(
+            host='localhost'))
+
     def alpha_beta(self, board,player, ply, alpha, beta, recursive):
 
-        rabbit = RabbitClient()
-        result = "fuck"
+        #rabbit = RabbitClient()
+        #result = "fuck"
 
-        if(recursive == 0):
-            result = rabbit.call("Grachev")
+        #if(recursive == 0):
+            #result = rabbit.call("Grachev")
             # s = socket.socket()
             # s.connect(('188.166.85.167', 8080))
             # print("sended")
@@ -522,7 +550,7 @@ class Checkers:
             score = board.evaluate(player)
             if (recursive == 0):
                 print("result")
-                print(result)
+                #print(result)
                 # print("123")
                 # receive = s.recv(1024)
                 # print("Client received: " + str(receive))
@@ -566,7 +594,7 @@ class Checkers:
                 if alpha >= beta:
                     if (recursive == 0):
                         print("result")
-                        print(result)
+                        #print(result)
                         # print("123")
                         # receive = s.recv(1024)
                         # print("Client received: " + str(receive))
@@ -575,7 +603,7 @@ class Checkers:
             #return alpha this is our best score
             if (recursive == 0):
                 print("result")
-                print(result)
+                #print(result)
                 # print("123")
                 # receive = s.recv(1024)
                 # print("Client received: " + str(receive))
@@ -615,7 +643,7 @@ class Checkers:
                 if alpha >= beta:
                     if (recursive == 0):
                         print("result")
-                        print(result)
+                        #print(result)
                         # print("123")
                         # receive = s.recv(1024)
                         # print("Client received: " + str(receive))
@@ -625,7 +653,7 @@ class Checkers:
 
             if(recursive == 0):
                 print("result")
-                print(result)
+                #print(result)
                 # print("123")
                 # receive = s.recv(1024)
                 # print("Client received: " + str(receive))
