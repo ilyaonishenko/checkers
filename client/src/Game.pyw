@@ -257,9 +257,12 @@ class GUI(QWidget):
                 # checks if the turn is the players before taking a move
                 if(self.game.getTurn() == "Player"):
                     moved = self.game.movePiece("Player",self.x1, self.y1, self.x2,self.y2, TypeMove.real)
+
                 # updates the board
                 self.updateGame()
                 if moved and self.game.getTurn() == "Player" and  not self.game.isOver() :
+                    print("PLAYER" + self.game.data_to_send)
+
                     # appends the deepcopy state of the board that was copied before a move
                     self.gameHistory.append(tmpGame)
                     # ends

@@ -11,6 +11,7 @@ from server.src.Encoder import *
 from server.src.Sender import *
 
 import json
+import pika
 
 
 class Checkers:
@@ -88,8 +89,42 @@ class Checkers:
         else:
             return False
 
+    def sendAndMove(self, player, x, y, x1, y1):
+            # Lock.startTurn(self)
+        #print(str(player) + str(x) + "," + str(y) + "," + str(x1) + "," + str(y1))
+        data = "MOVE " + str(x) + "," + str(y) + "," + str(x1) + "," + str(y1)
+        self.send(data)
+            # sending
+            # Sender.move(self, Sender.reformat(self,x,y), Sender.reformat(self,x1,y1))
+            # time.sleep(4)
+            # Lock.endTurn(self)
+
+    def sendAndRemove(self, player, removePieceX, removePieceY):
+            # Lock.startTurn(self)
+
+        data = "REMOVE " + str(removePieceX) + "," + str(removePieceY)
+        self.send(data)
+            # sending
+            # if player is "AI":
+            #     Sender.remove_AIs(self, Sender.reformat(self,removePieceX, removePieceY))
+            # else: Sender.remove_player(self, Sender.reformat(self,removePieceX, removePieceY))
+            # time.sleep(4)
+            # Lock.endTurn(self)
+    def send(self, data):
+        connection = pika.BlockingConnection(pika.ConnectionParameters(
+            'localhost'))
+        channel = connection.channel()
+
+        channel.queue_declare(queue='for_robot')
+        channel.basic_publish(exchange='',
+                              routing_key='for_robot',
+                              body='ai' + data)
+        connection.close()
+
     # moves a piece players piece from X Y to x1 y1
     def movePiece(self,player,x,y,x1,y1,typeMove):
+
+
 
         #self.sender = Sender#
 
@@ -109,10 +144,15 @@ class Checkers:
                     for i in moves:
                         if i == move:
                             self.board.movePiece(x, y, x1, y1)
+                            if (typeMove == TypeMove.real):
+                                self.sendAndMove(player, x, y, x1, y1)
                             # checks if a jump is true then remove the piece being jumped
 
                             removePieceX = (x + (x1))/2
                             removePieceY = (y + (y1))/2
+
+                            if (typeMove == TypeMove.real):
+                                self.sendAndRemove(player, removePieceX, removePieceY)
 
                             self.board.removePiece(removePieceX, removePieceY)
 
@@ -134,10 +174,17 @@ class Checkers:
                     # This is the first jump
                     for i in moves:
                         if i == move :
+
+                            if (typeMove == TypeMove.real):
+                                self.sendAndMove(player, x, y, x1, y1)
+
                             self.board.movePiece(x, y, x1, y1)
                             # checks if a jump is true then remove the piece being jumped
                             removePieceX = (x + (x1))/2
                             removePieceY = (y + (y1))/2
+
+                            if (typeMove == TypeMove.real):
+                                self.sendAndRemove(player, removePieceX, removePieceY)
 
                             self.board.removePiece(removePieceX, removePieceY)
                             #after jumping check if it can be Kinged and can it jump again
@@ -157,6 +204,10 @@ class Checkers:
                 if moves:
                     for i in moves:
                         if(i == move):
+
+                            if (typeMove == TypeMove.real):
+                                self.sendAndMove(player, x, y, x1, y1)
+
                             self.board.movePiece(x, y, x1, y1)
                             self.jumpAgain=(False,None,None)
                             moved = True
