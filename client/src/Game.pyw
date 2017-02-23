@@ -248,7 +248,7 @@ class GUI(QWidget):
         if not self.game.isOver():
             # if x1 is none then its the first click
             if self.x1 == None :
-                self.click(x, y)
+                self.click(x, y) 
             else:
                 #second click
                 self.x2 = x
