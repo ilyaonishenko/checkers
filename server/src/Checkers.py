@@ -8,7 +8,7 @@ import Board
 import Piece
 import TypeMove
 import Encoder
-import Sender
+#import Sender
 
 import json
 import pika
@@ -144,14 +144,14 @@ class Checkers:
                     for i in moves:
                         if i == move:
                             self.board.movePiece(x, y, x1, y1)
-                            if (typeMove == TypeMove.real):
+                            if (typeMove == TypeMove.TypeMove.real):
                                 self.sendAndMove(player, x, y, x1, y1)
                             # checks if a jump is true then remove the piece being jumped
 
                             removePieceX = (x + (x1))/2
                             removePieceY = (y + (y1))/2
 
-                            if (typeMove == TypeMove.real):
+                            if (typeMove == TypeMove.TypeMove.real):
                                 self.sendAndRemove(player, removePieceX, removePieceY)
 
                             self.board.removePiece(removePieceX, removePieceY)
@@ -175,7 +175,7 @@ class Checkers:
                     for i in moves:
                         if i == move :
 
-                            if (typeMove == TypeMove.real):
+                            if (typeMove == TypeMove.TypeMove.real):
                                 self.sendAndMove(player, x, y, x1, y1)
 
                             self.board.movePiece(x, y, x1, y1)
@@ -183,7 +183,7 @@ class Checkers:
                             removePieceX = (x + (x1))/2
                             removePieceY = (y + (y1))/2
 
-                            if (typeMove == TypeMove.real):
+                            if (typeMove == TypeMove.TypeMove.real):
                                 self.sendAndRemove(player, removePieceX, removePieceY)
 
                             self.board.removePiece(removePieceX, removePieceY)
@@ -205,7 +205,7 @@ class Checkers:
                     for i in moves:
                         if(i == move):
 
-                            if (typeMove == TypeMove.real):
+                            if (typeMove == TypeMove.TypeMove.real):
                                 self.sendAndMove(player, x, y, x1, y1)
 
                             self.board.movePiece(x, y, x1, y1)

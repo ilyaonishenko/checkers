@@ -10,12 +10,11 @@ class RabbitClient(object):
     def __init__(self):
         self.config = configparser.ConfigParser()
         self.config.read(resource_filename('server','foo.config'))
-        self.uname = self.config['RABBITMQ']['user']
-        self.pas = self.config['RABBITMQ']['password']
+        self.uname = 'admin'
+        self.pas = 'grachevhuy'
         self.info = pika.PlainCredentials(self.uname, self.pas)
-        self.connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='188.166.85.167',
-                                      credentials=self.info))
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(
+            '188.166.85.167', credentials=self.info))
         self.channel = self.connection.channel()
 
         result = self.channel.queue_declare(exclusive=True)
