@@ -101,7 +101,7 @@ class Checkers:
         channel.queue_declare(queue='turn_queue')
         channel.basic_publish(exchange='',
                               routing_key='turn_queue',
-                              body='player' + data)
+                              body=data)
         connection.close()
 
 

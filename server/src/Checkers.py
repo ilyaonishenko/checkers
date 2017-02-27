@@ -122,7 +122,7 @@ class Checkers:
         channel.queue_declare(queue='for_robot')
         channel.basic_publish(exchange='',
                               routing_key='for_robot',
-                              body='ai' + data)
+                              body=data)
         connection.close()
 
     # moves a piece players piece from X Y to x1 y1
