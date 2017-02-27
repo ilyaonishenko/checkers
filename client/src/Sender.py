@@ -5,6 +5,7 @@ import time
 import socket
 
 
+
 class Sender:
 
     global last
@@ -12,7 +13,7 @@ class Sender:
     global player_num
 
 
-
+    '''
     def send(self, message):
         last = datetime.datetime.now()
         td = (datetime.datetime.now()-last)
@@ -29,24 +30,25 @@ class Sender:
         print(resp)
 
         last = datetime.datetime.now()
+    '''
 
     def __init__(self):
 
         last = datetime.datetime.now()
 
-    def static_init(self):
-        self.height = 3
-        self.A = [0, 0, 0, 0, 0, 0]
-        self.player_i = 0
-        self.AI_i = 1
 
-    def reformat(self, x, y):
+    @staticmethod
+    def reformat(x, y):
         return 1+(7-y)*8+x
 
+    @staticmethod
+    def move(placeFrom, placeTo):
+        return "CHECK,6\r\nM,M,M,M,M,M\r\n" + str(1) + "," + str(placeFrom) + "," + str(1) + "," + str(placeTo) + "," + str(0) + "," + str(0)
 
-    def move(self,placeFrom, placeTo):
-        return Sender.send(self,"CHECK,6\r\nM,M,M,M,M,M\r\n" + str(1) + "," + str(placeFrom) + "," + str(1) + "," + str(placeTo) + "," + str(0) + "," + str(0))
-
+    @staticmethod
+    def remove(placeFrom):
+        return "CHECK,6\r\nM,M,M,M,M,M\r\n" + str(1) + "," + str(placeFrom) + "," + str(4) + "," + str(1) + "," + str(0) + "," + str(3)
+    '''
     def remove_player(self, placeFrom):
         if self.A[self.player_i] > self.height:
             self.player_i += 2
@@ -54,18 +56,20 @@ class Sender:
         self.A[self.player_i] += 1
         return  Sender.send(self, "CHECK,6\r\nM,M,M,M,M,M\r\n" + str(1) + "," + str(placeFrom) + "," + str(4) + "," + str(self.player_i) + "," + str(0) + "," + str(self.A[self.player_i]))
 
-    def remove_AI(self, placeFrom):
-        if self.A[self.AI_i] > self.height:
-            self.AI_i += 2
-
-        self.A[self.AI_i] += 1
-        return  Sender.send(self, "CHECK,6\r\nM,M,M,M,M,M\r\n" + str(1) + "," + str(placeFrom) + "," + str(4) + "," + str(self.AI_i) + "," + str(0) + "," + str(self.A[self.AI_i]))
 
     def takeback_player(self, placeForm):
         return
 
     def takeback_AI(self, placeForm):
         return
+
+    def static_init(self):
+        self.height = 3
+        self.A = [0, 0, 0, 0, 0, 0]
+        self.player_i = 0
+        self.AI_i = 1
+
+    '''
 
 
 

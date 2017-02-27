@@ -8,7 +8,7 @@ import Board
 import Piece
 import TypeMove
 import Encoder
-#import Sender
+import Sender
 
 import json
 import pika
@@ -90,26 +90,30 @@ class Checkers:
             return False
 
     def sendAndMove(self, player, x, y, x1, y1):
-            # Lock.startTurn(self)
+        # Lock.startTurn(self)
         #print(str(player) + str(x) + "," + str(y) + "," + str(x1) + "," + str(y1))
-        data = "MOVE " + str(x) + "," + str(y) + "," + str(x1) + "," + str(y1)
+        pos1 = Sender.reformat(x, y)
+        pos2 = Sender.reformat(x1, y1)
+        data = Sender.move(pos1, pos2)
         self.send(data)
-            # sending
-            # Sender.move(self, Sender.reformat(self,x,y), Sender.reformat(self,x1,y1))
-            # time.sleep(4)
-            # Lock.endTurn(self)
+        # sending
+        # Sender.move(self, Sender.reformat(self,x,y), Sender.reformat(self,x1,y1))
+        # time.sleep(4)
+        # Lock.endTurn(self)
+
 
     def sendAndRemove(self, player, removePieceX, removePieceY):
-            # Lock.startTurn(self)
+        # Lock.startTurn(self)
 
-        data = "REMOVE " + str(removePieceX) + "," + str(removePieceY)
+        removePiece = Sender.reformat(removePieceX, removePieceY)
+        data = Sender.remove(removePiece)
         self.send(data)
-            # sending
-            # if player is "AI":
-            #     Sender.remove_AIs(self, Sender.reformat(self,removePieceX, removePieceY))
-            # else: Sender.remove_player(self, Sender.reformat(self,removePieceX, removePieceY))
-            # time.sleep(4)
-            # Lock.endTurn(self)
+        # sending
+        # if player is "AI":
+        #     Sender.remove_AIs(self, Sender.reformat(self,removePieceX, removePieceY))
+        # else: Sender.remove_player(self, Sender.reformat(self,removePieceX, removePieceY))
+        # time.sleep(4)
+        # Lock.endTurn(self)
     def send(self, data):
         connection = pika.BlockingConnection(pika.ConnectionParameters(
             'localhost'))
