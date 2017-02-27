@@ -92,9 +92,9 @@ class Checkers:
     def sendAndMove(self, player, x, y, x1, y1):
         # Lock.startTurn(self)
         #print(str(player) + str(x) + "," + str(y) + "," + str(x1) + "," + str(y1))
-        pos1 = Sender.reformat(x, y)
-        pos2 = Sender.reformat(x1, y1)
-        data = Sender.move(pos1, pos2)
+        pos1 = Sender.Sender.reformat(x, y)
+        pos2 = Sender.Sender.reformat(x1, y1)
+        data = Sender.Sender.move(pos1, pos2)
         self.send(data)
         # sending
         # Sender.move(self, Sender.reformat(self,x,y), Sender.reformat(self,x1,y1))
@@ -105,8 +105,8 @@ class Checkers:
     def sendAndRemove(self, player, removePieceX, removePieceY):
         # Lock.startTurn(self)
 
-        removePiece = Sender.reformat(removePieceX, removePieceY)
-        data = Sender.remove(removePiece)
+        removePiece = Sender.Sender.reformat(removePieceX, removePieceY)
+        data = Sender.Sender.remove(removePiece)
         self.send(data)
         # sending
         # if player is "AI":
