@@ -10,8 +10,8 @@ class RabbitClient(object):
     def __init__(self):
         self.config = configparser.ConfigParser()
         self.config.read(resource_filename('server','foo.config'))
-        self.uname = 'admin'
-        self.pas = 'grachevhuy'
+        self.uname = 'admin2'
+        self.pas = 'grachevhuy2'
         self.info = pika.PlainCredentials(self.uname, self.pas)
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(
             '188.166.85.167', credentials=self.info))
@@ -26,7 +26,7 @@ class RabbitClient(object):
     def on_response(self, ch, method, props, body):
         if self.corr_id == props.correlation_id:
             self.response = body
-
+# 2802
     def call(self, n, name='rpc_queue'):
         self.response = None
         self.corr_id = str(uuid.uuid4())

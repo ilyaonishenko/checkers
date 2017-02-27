@@ -21,7 +21,7 @@ class Checkers:
 
 
     def __init__(self, *args, **kwargs):
-        Sender.static_init(self)
+        # Sender.static_init(self)
         if len(kwargs) is 0:
             self.board = Board(8)
             self.size = self.board.getSize()
