@@ -39,7 +39,7 @@ class Sender:
 
     @staticmethod
     def reformat(x, y):
-        return 1+(7-y)*8+x
+        return int(1+(7-y)*8+x)
 
     @staticmethod
     def move(placeFrom, placeTo):

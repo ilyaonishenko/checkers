@@ -34,8 +34,9 @@ channel = connection.channel()
 channel.queue_declare(queue='for_robot')
 
 def callback(ch, method, properties, body):
-    print(" [x] Received %r" % body)
+    print(" [x] Received %r" + body.decode())
     send(body.decode())
+
 
 channel.basic_consume(callback,
                       queue='for_robot',
