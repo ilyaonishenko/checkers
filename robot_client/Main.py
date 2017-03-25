@@ -34,7 +34,7 @@ channel = connection.channel()
 
 channel.queue_declare(queue='for_robot')
 
-white_map = {-1: [21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 42, 43, 44]}
+white_map = {-1: [20, 21, 22, 23, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 41, 42, 43]}
 black_map = {-1: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20]}
 
 def startup():
