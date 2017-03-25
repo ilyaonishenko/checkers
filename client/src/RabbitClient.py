@@ -9,7 +9,7 @@ from client.src.Encoder import Encoder
 class RabbitClient(object):
     def __init__(self):
         self.config = configparser.ConfigParser()
-        self.config.read(resource_filename('server','foo.config'))
+        self.config.read(resource_filename('server', 'foo.config'))
         self.uname = 'admin2'
         self.pas = 'grachevhuy2'
         self.info = pika.PlainCredentials(self.uname, self.pas)
@@ -26,7 +26,8 @@ class RabbitClient(object):
     def on_response(self, ch, method, props, body):
         if self.corr_id == props.correlation_id:
             self.response = body
-# 2802
+        # 2802
+
     def call(self, n, name='rpc_queue'):
         self.response = None
         self.corr_id = str(uuid.uuid4())
@@ -43,9 +44,6 @@ class RabbitClient(object):
             self.connection.process_data_events()
         # return hash(self.response)
         return json.loads(self.response.decode("utf-8"))
-
-
-
 
 # fibonacci_rpc = FibonacciRpcClient()
 #

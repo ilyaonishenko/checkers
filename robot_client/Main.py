@@ -3,6 +3,7 @@ import time
 import pika
 import configparser
 import datetime
+from robot_client.Sender import *
 from pkg_resources import resource_filename
 
 
@@ -33,9 +34,39 @@ channel = connection.channel()
 
 channel.queue_declare(queue='for_robot')
 
+white_map = {-1: [21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 42, 43, 44]}
+black_map = {-1: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20]}
+
+def startup():
+    for i in range(0, 8):
+        if i<3:
+            a = 0
+            if i%2 == 0:
+                a = 1
+            for j in range(a, 8, 2):
+                tmp =  white_map[-1].pop(-1)
+                num = Sender.reformat(j,i)
+                white_map[num] = tmp
+                send(Sender.start_move(tmp, num))
+        elif i>4:
+            a = 0
+            if i % 2 == 0:
+                a = 1
+            for j in range(a, 8, 2):
+                tmp = black_map[-1].pop(-1)
+                num = Sender.reformat(j, i)
+                black_map[num] = tmp
+                send(Sender.start_move(tmp, num))
+
 def callback(ch, method, properties, body):
     print(" [x] Received %r" + body.decode())
-    send(body.decode())
+    if body.decode() is "START_GAME":
+        print("START_GAME")
+        startup()
+    elif body.decode() is "CLEAN":
+        print("CLEAN")
+    else:
+        send(body.decode())
 
 
 channel.basic_consume(callback,

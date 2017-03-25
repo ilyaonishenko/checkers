@@ -214,6 +214,18 @@ class GUI(QWidget):
         self.x2 = None
         self.y2 = None
         # if a game is in session a pop up box will appear asking does the player want to start a new game
+        uname = 'admin'
+        pas = 'grachevhuy'
+        info = pika.PlainCredentials(uname, pas)
+        connection = pika.BlockingConnection(pika.ConnectionParameters(
+            '188.166.85.167', credentials=info))
+        channel = connection.channel()
+
+        channel.queue_declare(queue='turn_queue')
+        channel.basic_publish(exchange='',
+                              routing_key='turn_queue',
+                              body="START_GAME")
+        connection.close()
         if self.playing:
 
             resignBox = QMessageBox.question(self,'New Game','Are you sure you want start a new game while a game is one?',QMessageBox.Yes,QMessageBox.No)

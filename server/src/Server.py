@@ -87,9 +87,10 @@ def parse_dump(bytes):
 # 'array': '[[null, {"type": 0, "owner": "AI"}, null, null, null, {"type": 0, "owner": "Player"}, null, {"type": 0, "owner": "Player"}], [{"type": 0, "owner": "AI"}, null, {"type": 0, "owner": "AI"}, null, null, null, {"type": 0, "owner": "Player"}, null], [null, {"type": 0, "owner": "AI"}, null, null, null, {"type": 0, "owner": "Player"}, null, {"type": 0, "owner": "Player"}], [{"type": 0, "owner": "AI"}, null, {"type": 0, "owner": "AI"}, null, {"type": 0, "owner": "Player"}, null, {"type": 0, "owner": "Player"}, null], [null, {"type": 0, "owner": "AI"}, null, null, null, null, null, {"type": 0, "owner": "Player"}], [{"type": 0, "owner": "AI"}, null, {"type": 0, "owner": "AI"}, null, null, null, {"type": 0, "owner": "Player"}, null], [null, {"type": 0, "owner": "AI"}, null, null, null, {"type": 0, "owner": "Player"}, null, {"type": 0, "owner": "Player"}], [{"type": 0, "owner": "AI"}, null, {"type": 0, "owner": "AI"}, null, null, null, {"type": 0, "owner": "Player"}, null]]'
 
 def on_request(ch, method, props, body):
+
     status = parse_dump(body)
     game = evaluate_move(status)
-    x1, y1, x2, y2 = game['ai']
+    # x1, y1, x2, y2 = game['ai']
     #print("AI_TURN: " + str(x1) + " " + str(y1) + " -> " + str(x2) + " " + str(y2))
     cBody = json.dumps(game, cls=Encoder.Encoder)
     # print(cBody)
