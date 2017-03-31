@@ -58,15 +58,50 @@ def startup():
                 black_map[num] = tmp
                 send(Sender.start_move(tmp, num))
 
+def cleanup():
+    for i in white_map.keys():
+        if(i == -1):
+            continue
+        placeto = white_map.pop(i)
+        white_map[-1].append(placeto)
+        send(Sender.remove(i, placeto))
+    for i in black_map.keys():
+        if(i == -1):
+            continue
+        placeto = black_map.pop(i)
+        black_map[-1].append(placeto)
+        send(Sender.remove(i, placeto))
+
+
+
 def callback(ch, method, properties, body):
     print(" [x] Received %r" + body.decode())
     if body.decode() is "START_GAME":
         print("START_GAME")
+        cleanup()
         startup()
     elif body.decode() is "CLEAN":
         print("CLEAN")
     else:
-        send(body.decode())
+        pars = body.decode().split(' ')
+        if(len(pars) == 1):
+            placefrom = int(pars[0])
+            if placefrom in white_map:
+                placeto = white_map.pop(placefrom)
+                white_map[-1].append(placeto)
+            else:
+                placeto = black_map.pop(placefrom)
+                black_map[-1].append(placeto)
+            send(Sender.remove(placefrom, placeto))
+        else:
+            placefrom, placeto = pars
+            if placefrom in white_map:
+                white_map[placeto] = white_map.pop(placefrom)
+            else:
+                black_map[placeto] = black_map.pop(placefrom)
+            send(Sender.move(placefrom, placeto))
+
+
 
 
 channel.basic_consume(callback,

@@ -42,12 +42,13 @@ class Sender:
 
     @staticmethod
     def move(placeFrom, placeTo):
-        return "CHECK,6\r\nM,M,M,M,M,M\r\n" + str(1) + "," + str(placeFrom) + "," + str(1) + "," + str(placeTo) + "," + str(0) + "," + str(0)
-
+        #return "CHECK,6\r\nM,M,M,M,M,M\r\n" + str(1) + "," + str(placeFrom) + "," + str(1) + "," + str(placeTo) + "," + str(0) + "," + str(0)
+        return str(placeFrom) + " " + str(placeTo)
     @staticmethod
     def remove(placeFrom):
-        return "CHECK,6\r\nM,M,M,M,M,M\r\n" + str(1) + "," + str(placeFrom) + "," + str(4) + "," + str(1) + "," + str(0) + "," + str(3)
+        return str(placeFrom)
     '''
+
     def remove_player(self, placeFrom):
         if self.A[self.player_i] > self.height:
             self.player_i += 2

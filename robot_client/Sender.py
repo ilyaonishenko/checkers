@@ -45,8 +45,8 @@ class Sender:
         return "CHECK,6\r\nM,M,M,M,M,M\r\n" + str(1) + "," + str(placeFrom) + "," + str(1) + "," + str(placeTo) + "," + str(0) + "," + str(0)
 
     @staticmethod
-    def remove(placeFrom):
-        return "CHECK,6\r\nM,M,M,M,M,M\r\n" + str(1) + "," + str(placeFrom) + "," + str(4) + "," + str(1) + "," + str(0) + "," + str(3)
+    def remove(placeFrom, placeTo):
+        return "CHECK,6\r\nM,M,M,M,M,M\r\n" + str(1) + "," + str(placeFrom) + "," + str(2) + "," + str(placeTo) + "," + str(0) + "," + str(0)
     @staticmethod
     def start_move(placeFrom, placeTo):
         return "CHECK,6\r\nM,M,M,M,M,M\r\n" + str(2) + "," + str(placeFrom) + "," + str(1) + "," + str(placeTo) + "," + str(0) + "," + str(0)
