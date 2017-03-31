@@ -59,18 +59,23 @@ def startup():
                 send(Sender.start_move(tmp, num))
 
 def cleanup():
+    white_list = []
+    black_list = []
     for i in white_map.keys():
         if(i == -1):
             continue
         placeto = white_map.pop(i)
-        white_map[-1].append(placeto)
+        white_list.append(placeto)
         send(Sender.remove(i, placeto))
     for i in black_map.keys():
         if(i == -1):
             continue
         placeto = black_map.pop(i)
-        black_map[-1].append(placeto)
+        black_list.append(placeto)
         send(Sender.remove(i, placeto))
+    white_map[-1] = white_list
+    black_map[-1] = black_list
+
 
 
 
