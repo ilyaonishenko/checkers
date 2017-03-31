@@ -10,8 +10,8 @@ from pkg_resources import resource_filename
 def send(message):
     last = datetime.datetime.now()
     td = (datetime.datetime.now() - last)
-    if (td.seconds * 1000000 + td.microseconds * 200000):
-        time.sleep(0.2)
+    # if (td.seconds * 1000000 + td.microseconds * 200000):
+    time.sleep(0.2)
     host = '10.0.0.2'
     port = 10002
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -35,7 +35,7 @@ channel = connection.channel()
 channel.queue_declare(queue='for_robot')
 
 white_map = {-1: [20, 21, 22, 23, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 41, 42, 43]}
-black_map = {-1: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20]}
+black_map = {-1: [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19]}
 
 def startup():
     for i in range(0, 8):
