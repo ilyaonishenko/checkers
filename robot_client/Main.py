@@ -3,7 +3,7 @@ import time
 import pika
 import configparser
 import datetime
-from robot_client.Sender import *
+from Sender import *
 from pkg_resources import resource_filename
 
 
@@ -23,8 +23,8 @@ def send(message):
     print(resp)
     last = datetime.datetime.now()
 
-config = configparser.ConfigParser()
-config.read(resource_filename('server', 'foo.config'))
+# config = configparser.ConfigParser()
+# config.read(resource_filename('server', 'foo.config'))
 uname = 'admin3'
 pas = 'grachevhuy3'
 info = pika.PlainCredentials(uname, pas)
@@ -76,7 +76,7 @@ def cleanup():
 
 def callback(ch, method, properties, body):
     print(" [x] Received %r" + body.decode())
-    if body.decode() is "START_GAME":
+    if body.decode() == "START_GAME":
         print("START_GAME")
         cleanup()
         startup()
@@ -94,7 +94,8 @@ def callback(ch, method, properties, body):
                 black_map[-1].append(placeto)
             send(Sender.remove(placefrom, placeto))
         else:
-            placefrom, placeto = pars
+            placefrom = int(pars[0])
+            placeto = int(pars[1])
             if placefrom in white_map:
                 white_map[placeto] = white_map.pop(placefrom)
             else:
