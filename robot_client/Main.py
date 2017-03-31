@@ -38,8 +38,8 @@ white_map = {}
 black_map = {}
 
 def startup():
-    white_map = {-1: [20, 21, 22, 23, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 41, 42, 43]}
-    black_map = {-1: [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19]}
+    white_map[-1] = [20, 21, 22, 23, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 41, 42, 43]
+    black_map[-1] = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19]
     for i in range(0, 8):
         if i<3:
             a = 0
@@ -87,6 +87,8 @@ def callback(ch, method, properties, body):
         print("START_GAME")
         cleanup()
         startup()
+        print(white_map)
+        print(black_map)
     elif body.decode() is "CLEAN":
         print("CLEAN")
     else:
