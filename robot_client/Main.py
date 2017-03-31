@@ -66,17 +66,19 @@ def cleanup():
     for i in white_map.keys():
         if(i == -1):
             continue
-        placeto = white_map.pop(i)
+        placeto = white_map[i]
         white_list.append(placeto)
         send(Sender.remove(i, placeto))
     for i in black_map.keys():
         if(i == -1):
             continue
-        placeto = black_map.pop(i)
+        placeto = black_map[i]
         black_list.append(placeto)
         send(Sender.remove(i, placeto))
-    white_map[-1] = white_list
-    black_map[-1] = black_list
+    #white_map[-1] = white_list
+    #black_map[-1] = black_list
+    white_list = {-1 : white_list}
+    black_list = {-1 : black_list}
 
 
 
