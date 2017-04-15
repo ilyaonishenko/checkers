@@ -81,7 +81,7 @@ class GUI(QWidget):
         quitButton.resize(80,50)
         quitButton.move(self.width()-90,self.height()-80)
 
-        undoButton = QPushButton("Undo",self)
+        undoButton = QPushButton("Clean",self)
         undoButton.resize(80,50)
         undoButton.move(self.width()-90, self.height() -160 )
 
@@ -186,7 +186,7 @@ class GUI(QWidget):
 
     # undo function is called when undo button is clicked
     def undo(self):
-        if self.gameHistory and self.playing:
+        """if self.gameHistory and self.playing:
             # deepcopy of the what's being pop'd
             pop = deepcopy(self.gameHistory.pop())
             self.game = pop
@@ -194,6 +194,19 @@ class GUI(QWidget):
             self.updateGame()
             # sets gameHistory to none as undo function only works for one undo
             self.gameHistory = []
+        """
+        uname = 'admin'
+        pas = 'grachevhuy'
+        info = pika.PlainCredentials(uname, pas)
+        connection = pika.BlockingConnection(pika.ConnectionParameters(
+            '188.166.85.167', credentials=info))
+        channel = connection.channel()
+
+        channel.queue_declare(queue='turn_queue')
+        channel.basic_publish(exchange='',
+                              routing_key='turn_queue',
+                              body="CLEAN")
+        connection.close()
 
     # resign function  is called when resign button is clicked
     def resign(self):

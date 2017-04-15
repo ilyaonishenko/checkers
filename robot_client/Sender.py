@@ -50,6 +50,10 @@ class Sender:
     @staticmethod
     def start_move(placeFrom, placeTo):
         return "CHECK,6\r\nM,M,M,M,M,M\r\n" + str(2) + "," + str(placeFrom) + "," + str(1) + "," + str(placeTo) + "," + str(0) + "," + str(0)
+    @staticmethod
+    def replace(place1, place2):
+        return "CHECK,6\r\nM,M,M,M,M,M\r\n" + str(2) + "," + str(place1) + "," + str(1) + "," + str(place2) + "," + str(0) + "," + str(0)
+
 
     '''
     def remove_player(self, placeFrom):
