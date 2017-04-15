@@ -36,14 +36,13 @@ channel.queue_declare(queue='for_robot')
 
 white_map = {}
 black_map = {}
-white_king_list = []
-black_king_list = []
+white_king_list = [1,3,5,7]
+black_king_list = [64, 62, 60, 58]
 
 def startup():
     white_map[-1] = [20, 21, 22, 23, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 41, 42, 43]
     black_map[-1] = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19]
-    white_king_list = [1,3,5,7]
-    black_king_list = [64, 62, 60, 58]
+
 
     for i in range(0, 8):
         if i<3:
@@ -94,12 +93,14 @@ def callback(ch, method, properties, body):
         print("START_GAME")
         cleanup()
         startup()
-        print(white_map)
-        print(black_map)
+        print(str(white_map))
+        print(str(black_map))
     elif body.decode() == "CLEAN":
         print("CLEAN")
         cleanup()
     else:
+        print(str(white_map))
+        print(str(black_map))
         pars = body.decode().split(' ')
         if(len(pars) == 1):
             placefrom = int(pars[0])
@@ -147,11 +148,11 @@ def callback(ch, method, properties, body):
             else:
                 if placeto in black_king_list:
                     print("blackkinglist: "+str(black_king_list))
-                    p_to = white_map.pop(placefrom)
+                    p_to = black_map.pop(placefrom)
                     print("p_to: "+str(p_to))
                     print("placefrom: "+str(placefrom))
                     print("blackmap: "+str(black_map))
-                    white_map[-1].append(placeto)
+                    black_map[-1].append(placeto)
                     print("p_to: " + str(p_to))
                     print("placefrom: " + str(placefrom))
                     print("blackmap: " + str(black_map))
@@ -159,12 +160,12 @@ def callback(ch, method, properties, body):
                     print("p_to: " + str(p_to))
                     print("placefrom: " + str(placefrom))
                     print("blackmap: " + str(black_map))
-                    tmp = white_map[-1].pop(0)
+                    tmp = black_map[-1].pop(0)
                     print("p_to: " + str(p_to))
                     print("placefrom: " + str(placefrom))
                     print("blackmap: " + str(black_map))
                     print("tmp: "+str(tmp))
-                    white_map[placeto] = tmp
+                    black_map[placeto] = tmp
                     print("p_to: " + str(p_to))
                     print("placefrom: " + str(placefrom))
                     print("blackmap: " + str(black_map))
