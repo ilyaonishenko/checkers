@@ -96,7 +96,7 @@ def callback(ch, method, properties, body):
         startup()
         print(white_map)
         print(black_map)
-    elif body.decode() is "CLEAN":
+    elif body.decode() == "CLEAN":
         print("CLEAN")
         cleanup()
     else:
@@ -113,6 +113,7 @@ def callback(ch, method, properties, body):
         else:
             placefrom = int(pars[0])
             placeto = int(pars[1])
+            print("MOVE" + str(placefrom) + " to " + str(placeto))
             if placefrom in white_map:
                 if placeto in white_king_list:
                     p_to = white_map.pop(placefrom)
@@ -125,7 +126,7 @@ def callback(ch, method, properties, body):
                     white_map[placeto] = white_map.pop(placefrom)
                     send(Sender.move(placefrom, placeto))
             else:
-                if placeto in white_king_list:
+                if placeto in black_king_list:
                     p_to = white_map.pop(placefrom)
                     white_map[-1].append(placeto)
                     send(Sender.remove(placefrom, p_to))
