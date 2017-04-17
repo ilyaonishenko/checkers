@@ -41,7 +41,7 @@ sock.bind(('', 8080))
             continue
         print("Server received: " + str(data))
 
-        conn.send(("MR GRACHEV IS A DEFINETELY HUY").encode())
+        conn.send(("").encode())
 
     print('closed')
     conn.close()
@@ -95,7 +95,7 @@ def on_request(ch, method, props, body):
     cBody = json.dumps(game, cls=Encoder.Encoder)
     # print(cBody)
     # print("get game body")
-    # response = "MR GRACHEV IS A DEFINETELY HUY"
+    # response = ""
 
     ch.basic_publish(exchange='',
                      routing_key=props.reply_to,

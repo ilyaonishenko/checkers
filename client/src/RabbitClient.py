@@ -10,8 +10,8 @@ class RabbitClient(object):
     def __init__(self):
         self.config = configparser.ConfigParser()
         self.config.read(resource_filename('server', 'foo.config'))
-        self.uname = 'admin2'
-        self.pas = 'grachevhuy2'
+        self.uname = 'admin'
+        self.pas = 'password'
         self.info = pika.PlainCredentials(self.uname, self.pas)
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(
             '188.166.85.167', credentials=self.info))

@@ -436,11 +436,11 @@ class Checkers:
         # result = "fuck"
         #
         # if (recursive == 0):
-        #     result = rabbit.call("Grachev")
+        #     result = rabbit.call("")
         #     # s = socket.socket()
         #     # s.connect(('188.166.85.167', 8080))
         #     # print("sended")
-        #     # s.send(("GRACHEVHUY").encode())
+        #     # s.send(("").encode())
 
         QCoreApplication.processEvents()
         # amount of moves to look ahead currently 3 moves ahead
@@ -574,7 +574,7 @@ class Checkers:
         #
         # print("Server received: " + data)
         #
-        # conn.send(("MR GRACHEV IS A DEFINETELY HUY").encode())
+        # conn.send(("").encode())
         #
         # conn.close()
         #

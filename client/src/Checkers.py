@@ -92,7 +92,7 @@ class Checkers:
         config = configparser.ConfigParser()
         config.read(resource_filename('server', 'foo.config'))
         uname = 'admin'
-        pas = 'grachevhuy'
+        pas = 'password'
         info = pika.PlainCredentials(uname, pas)
         connection = pika.BlockingConnection(pika.ConnectionParameters(
             '188.166.85.167', credentials=info))
@@ -539,12 +539,11 @@ class Checkers:
         #result = "fuck"
 
         #if(recursive == 0):
-            #result = rabbit.call("Grachev")
+            #result = rabbit.call("111")
             # s = socket.socket()
             # s.connect(('188.166.85.167', 8080))
             # print("sended")
-            # s.send(("GRACHEVHUY").encode())
-
+            # s.send(("PASSWORD").encode())
 
         QCoreApplication.processEvents()
         # amount of moves to look ahead currently 3 moves ahead

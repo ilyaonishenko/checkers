@@ -196,7 +196,7 @@ class GUI(QWidget):
             self.gameHistory = []
         """
         uname = 'admin'
-        pas = 'grachevhuy'
+        pas = 'password'
         info = pika.PlainCredentials(uname, pas)
         connection = pika.BlockingConnection(pika.ConnectionParameters(
             '188.166.85.167', credentials=info))
@@ -228,7 +228,7 @@ class GUI(QWidget):
         self.y2 = None
         # if a game is in session a pop up box will appear asking does the player want to start a new game
         uname = 'admin'
-        pas = 'grachevhuy'
+        pas = 'password'
         info = pika.PlainCredentials(uname, pas)
         connection = pika.BlockingConnection(pika.ConnectionParameters(
             '188.166.85.167', credentials=info))

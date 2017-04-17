@@ -25,8 +25,8 @@ def send(message):
 
 # config = configparser.ConfigParser()
 # config.read(resource_filename('server', 'foo.config'))
-uname = 'admin3'
-pas = 'grachevhuy3'
+uname = 'admin'
+pas = 'password'
 info = pika.PlainCredentials(uname, pas)
 connection = pika.BlockingConnection(pika.ConnectionParameters(
             '188.166.85.167', credentials=info))
