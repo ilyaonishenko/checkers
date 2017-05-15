@@ -11,7 +11,7 @@ def send(message):
     last = datetime.datetime.now()
     td = (datetime.datetime.now() - last)
     # if (td.seconds * 1000000 + td.microseconds * 200000):
-    time.sleep(0.2)
+    connection.sleep(0.2)
     host = '10.0.0.2'
     port = 10002
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
