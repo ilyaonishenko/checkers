@@ -94,15 +94,18 @@ class Checkers:
         uname = 'admin'
         pas = 'password'
         info = pika.PlainCredentials(uname, pas)
-        connection = pika.BlockingConnection(pika.ConnectionParameters(
-            '188.166.85.167', credentials=info))
-        channel = connection.channel()
+        try:
+            connection = pika.BlockingConnection(pika.ConnectionParameters('188.166.85.167', credentials=info, heartbeat_interval=0))
+            channel = connection.channel()
 
-        channel.queue_declare(queue='turn_queue')
-        channel.basic_publish(exchange='',
-                              routing_key='turn_queue',
-                              body=data)
-        connection.close()
+            channel.queue_declare(queue='turn_queue')
+            channel.basic_publish(exchange='',
+                                  routing_key='turn_queue',
+                                  body=data)
+            connection.close()
+        except Exception:
+            print("HUY")
+            self.send(data)
 
 
     def makeKing(self, player, x, y, number):
