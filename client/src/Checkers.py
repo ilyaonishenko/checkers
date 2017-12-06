@@ -95,7 +95,7 @@ class Checkers:
         pas = 'password'
         info = pika.PlainCredentials(uname, pas)
         try:
-            connection = pika.BlockingConnection(pika.ConnectionParameters('188.166.85.167', credentials=info, heartbeat_interval=0))
+            connection = pika.BlockingConnection(pika.ConnectionParameters('52.178.79.216', credentials=info, heartbeat_interval=0))
             channel = connection.channel()
 
             channel.queue_declare(queue='turn_queue')

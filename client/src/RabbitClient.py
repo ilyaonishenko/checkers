@@ -14,7 +14,7 @@ class RabbitClient(object):
         self.pas = 'password'
         self.info = pika.PlainCredentials(self.uname, self.pas)
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(
-            '188.166.85.167', credentials=self.info))
+            '52.178.79.216', credentials=self.info))
         self.channel = self.connection.channel()
 
         result = self.channel.queue_declare(exclusive=True)
