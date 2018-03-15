@@ -29,7 +29,7 @@ uname = 'admin'
 pas = 'password'
 info = pika.PlainCredentials(uname, pas)
 connection = pika.BlockingConnection(pika.ConnectionParameters(
-            '52.178.79.216', credentials=info))
+            '10.18.128.14', credentials=info))
 channel = connection.channel()
 
 channel.queue_declare(queue='for_robot')

@@ -204,7 +204,7 @@ class GUI(QWidget):
         pas = 'password'
         info = pika.PlainCredentials(uname, pas)
         connection = pika.BlockingConnection(pika.ConnectionParameters(
-            '52.178.79.216', credentials=info, heartbeat_interval= 0))
+            '10.18.128.14', credentials=info, heartbeat_interval= 0))
         channel = connection.channel()
 
         channel.queue_declare(queue='turn_queue')
@@ -237,7 +237,7 @@ class GUI(QWidget):
         pas = 'password'
         info = pika.PlainCredentials(uname, pas)
         connection = pika.BlockingConnection(pika.ConnectionParameters(
-            '52.178.79.216', credentials=info, heartbeat_interval=0))
+            '10.18.128.14', credentials=info, heartbeat_interval=0))
         channel = connection.channel()
 
         channel.queue_declare(queue='turn_queue')
