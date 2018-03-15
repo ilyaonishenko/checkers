@@ -47,9 +47,11 @@ sock.bind(('', 8080))
     conn.close()
 '''
 
-
+uname = "admin"
+password = "password"
+info = pika.PlainCredentials(uname, password)
 connection = pika.BlockingConnection(pika.ConnectionParameters(
-    host='localhost'))
+    host='localhost', credentials = info))
 channel = connection.channel()
 channel.queue_declare(queue='rpc_queue')
 channel.queue_declare(queue='turn_queue')
@@ -105,8 +107,11 @@ def on_request(ch, method, props, body):
 
 def on_turn_request(ch, method, props, body):
     print (body.decode() + "received")
+    uname = "admin"
+    password = "password"
+    info = pika.PlainCredentials(uname, password)
     connection = pika.BlockingConnection(pika.ConnectionParameters(
-        'localhost'))
+        'localhost', credentials = info))
     channel = connection.channel()
 
     channel.queue_declare(queue='for_robot')

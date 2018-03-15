@@ -115,8 +115,11 @@ class Checkers:
         # time.sleep(4)
         # Lock.endTurn(self)
     def send(self, data):
+        uname = "admin"
+        password = "password"
+        info = pika.PlainCredentials(uname, password)
         connection = pika.BlockingConnection(pika.ConnectionParameters(
-            'localhost'))
+            'localhost', credentials = info))
         channel = connection.channel()
 
         channel.queue_declare(queue='for_robot')
